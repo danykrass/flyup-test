@@ -64,84 +64,44 @@ class Mankind implements ArrayAccess, IteratorAggregate, Countable {
     // This can lead to memory problems when processing very large files, since the entire file will be loaded into RAM.
     // But with small amounts of data, it handles faster than the second option.
 
-    // public function loadPeopleFromFile($filename) {
-    //     try {
-    //         if (!file_exists($filename)) {
-    //             throw new Exception("File does not exist or cannot be accessed.");
-    //         }
-    
-    //         $newFilePath = __DIR__ . "/../people.csv";
-
-    //         if (!rename($filename, $newFilePath)) {
-    //             throw new Exception("Failed to rename the file.");
-    //         }
-
-
-    //         $file = fopen($newFilePath, 'r');
-    
-    //         if (!$file) {
-    //             throw new Exception("Unable to read the file contents.");
-    //         }
-    
-    //         $bufferSize = 32768; //bytes
-    //         $buffer = '';
-    
-    //         while (!feof($file)) {
-    //             $buffer .= fread($file, $bufferSize);
-    //             $lines = explode(PHP_EOL, $buffer);
-    //             $buffer = array_pop($lines);
-    
-    //             foreach ($lines as $line) {
-    //                 $personData = explode(';', trim($line));
-    //                 if (count($personData) === 5) {
-    //                     $id = intval($personData[0]);
-    //                     $name = $personData[1];
-    //                     $surname = $personData[2];
-    //                     $sex = $personData[3];
-    //                     $birthDate = $personData[4];
-    //                     $person = new Person($id, $name, $surname, $sex, $birthDate);
-    //                     $this[$id] = $person;
-    //                 }
-    //             }
-    //         }
-    
-    //         fclose($file);
-    //     } catch (Exception $e) {
-    //         echo $e->getMessage();
-    //     }
-    // }
-    // The second implementation, with a line-by-line reading of the file.
-    // Advantages of this approach:
-    // The file is read line by line, which allows you to process large files without loading them completely into memory. 
-    // This reduces memory consumption and allows for more efficient processing of large amounts of data. 
-    // The sequential reading and processing of each line of the file allows to achieve higher performance when loading large files.
-    // Thus, the proposed method using fgetcsv() is a better solution for handling large files
-
     public function loadPeopleFromFile($filename) {
         try {
-         if (!file_exists($filename)) {
-             throw new Exception("File does not exist or cannot be accessed.");
-         }
+            if (!file_exists($filename)) {
+                throw new Exception("File does not exist or cannot be accessed.");
+            }
     
-         $newFilePath = __DIR__ . "/../people.csv";
+            $newFilePath = __DIR__ . "/../people.csv";
+
+            if (!rename($filename, $newFilePath)) {
+                throw new Exception("Failed to rename the file.");
+            }
+
+
+            $file = fopen($newFilePath, 'r');
     
-         if (!rename($filename, $newFilePath)) {
-             throw new Exception("Failed to rename the file.");
-         }
-         $file = fopen($newFilePath, 'r');
-        if (!$file) {
-            throw new Exception("Unable to read the file contents.");
-        }
+            if (!$file) {
+                throw new Exception("Unable to read the file contents.");
+            }
     
-            while (($personData = fgetcsv($file, 0, ';')) !== false) {
-                if (count($personData) === 5) {
-                    $id = intval($personData[0]);
-                    $name = $personData[1];
-                    $surname = $personData[2];
-                    $sex = $personData[3];
-                    $birthDate = $personData[4];
-                    $person = new Person($id, $name, $surname, $sex, $birthDate);
-                    $this[$id] = $person;
+            $bufferSize = 32768; //bytes
+            $buffer = '';
+    
+            while (!feof($file)) {
+                $buffer .= fread($file, $bufferSize);
+                $lines = explode(PHP_EOL, $buffer);
+                $buffer = array_pop($lines);
+    
+                foreach ($lines as $line) {
+                    $personData = explode(';', trim($line));
+                    if (count($personData) === 5) {
+                        $id = intval($personData[0]);
+                        $name = $personData[1];
+                        $surname = $personData[2];
+                        $sex = $personData[3];
+                        $birthDate = $personData[4];
+                        $person = new Person($id, $name, $surname, $sex, $birthDate);
+                        $this[$id] = $person;
+                    }
                 }
             }
     
@@ -150,6 +110,47 @@ class Mankind implements ArrayAccess, IteratorAggregate, Countable {
             echo $e->getMessage();
         }
     }
+
+    // The second implementation, with a line-by-line reading of the file.
+    // Advantages of this approach:
+    // The file is read line by line, which allows you to process large files without loading them completely into memory. 
+    // This reduces memory consumption and allows for more efficient processing of large amounts of data. 
+    // The sequential reading and processing of each line of the file allows to achieve higher performance when loading large files.
+    // Thus, the proposed method using fgetcsv() is a better solution for handling large files
+
+    // public function loadPeopleFromFile($filename) {
+    //     try {
+    //      if (!file_exists($filename)) {
+    //          throw new Exception("File does not exist or cannot be accessed.");
+    //      }
+    
+    //      $newFilePath = __DIR__ . "/../people.csv";
+    
+    //      if (!rename($filename, $newFilePath)) {
+    //          throw new Exception("Failed to rename the file.");
+    //      }
+    //      $file = fopen($newFilePath, 'r');
+    //     if (!$file) {
+    //         throw new Exception("Unable to read the file contents.");
+    //     }
+    
+    //         while (($personData = fgetcsv($file, 0, ';')) !== false) {
+    //             if (count($personData) === 5) {
+    //                 $id = intval($personData[0]);
+    //                 $name = $personData[1];
+    //                 $surname = $personData[2];
+    //                 $sex = $personData[3];
+    //                 $birthDate = $personData[4];
+    //                 $person = new Person($id, $name, $surname, $sex, $birthDate);
+    //                 $this[$id] = $person;
+    //             }
+    //         }
+    
+    //         fclose($file);
+    //     } catch (Exception $e) {
+    //         echo $e->getMessage();
+    //     }
+    // }
     
     private function addPeopleToMankind($people) {
         $this->people += $people;
