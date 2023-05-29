@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>People App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<section>
+    <div class="wrapper">
+        <h1>People App</h1>
+        <div class="row jcsb">
+            <div class="load">
+                <h2>Load people from file / Generate</h2>
+                <input type="file" id="fileInput">
+                <button onclick="loadPeople()">Load</button>
+                <input type="text" id="count" placeholder="Enter the number of users">
+                <button onclick="generatePeople()">Generate</button>
+                <div id="generatorInfo"></div>
+            </div>
+
+            <div class="user">
+                <h2>Get person by ID</h2>
+                <div class="field-group">
+                    <input type="text" id="idInput" placeholder="Enter ID">
+                    <button onclick="getPerson()">Get</button>
+                </div>
+                <div class="info">
+                    <div id="personInfo"></div>
+                </div>
+            </div>
+
+            <div class="percent">
+                <h2>Percentage of men</h2>
+                <button onclick="getPercentage()">Get</button>
+                <div class="info"><div id="percentageInfo"></div></div>
+            </div>
+
+            <div class="table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Date of birth</th>
+                    </tr>
+                    </thead>
+                        <tbody id="tableContainer">
+                    </tbody>
+                </table>
+                <div id="pagination"></div>
+                <div id="loadingIndicator" style="display: none;">Loading...</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
