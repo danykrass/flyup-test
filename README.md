@@ -1,4 +1,4 @@
-# skyup-test
+#
 Test work
 
 Question:
